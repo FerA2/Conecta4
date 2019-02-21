@@ -12,55 +12,56 @@ namespace Conecta4
         public static void IniciaJuego()
         {
             // Creamos objetos iniciales: jugadores y tablero
-            Console.WriteLine("Elige el nombre del jugador 1");
-            string nombre1 = Console.ReadLine();
-            Console.WriteLine("Elige el nombre del jugador 2");
-            string nombre2 = Console.ReadLine();
-            Jugador player1 = new Jugador(nombre1, 'O');
-            Jugador player2 = new Jugador(nombre2, 'X');
+            Jugador[] players = new Jugador[2];
+            for (int i = 0; i < 2; i++)
+            { 
+                players[i] = new Jugador();
+                Console.WriteLine($"Elige el nombre del jugador {i+1}");
+                players[i].Nombre = Console.ReadLine();
+            }
+            // Cambiamos las letras de cada player.
+            players[0].Letra = 'O';
+            players[1].Letra = 'X';
             Tablero campo = new Tablero();
             campo.Rellena();
             // Iniciamos los turnos de juego.
             int casillasCompletas = 0;
-            while (true)
+            while (!Fin(players[0],casillasCompletas)&& !Fin(players[1], casillasCompletas))
             {
-                Turno(player1, campo);
-                if (player1.getGanador())
+                for (int i = 0; i < 2; i++)
                 {
-                    campo.ImprimeTablero();
-                    Console.WriteLine($"Ha ganado {player1.getNombre()}");
-                    break;
+                    Turno(players[i], campo, ref casillasCompletas);
+                    if (players[i].Ganador == true) break;
                 }
-                casillasCompletas++;
-                Turno(player2, campo);
-                if (player2.getGanador())
-                {
-                    campo.ImprimeTablero();
-                    Console.WriteLine($"Ha ganado {player2.getNombre()}");
-                    break;
-                }
-                // Si se acaban las casillas empata y cierra.
-                casillasCompletas++;
-                if (casillasCompletas == 42)
-                {
-                    Console.WriteLine("Empate");
-                    break;
-                }
-                Console.WriteLine(casillasCompletas);
             }
+            campo.ImprimeTablero();
         }
-        public static void Turno(Jugador player, Tablero campo)
+        public static void Turno(Jugador player, Tablero campo,ref int casillasCompletas)
         {
             campo.ImprimeTablero();
-            Console.WriteLine($"Turno de {player.getNombre()}");
-            player.Disparo(player.getLetra(),player.getGanador(), campo);
+            Console.WriteLine($"Turno de {player.Nombre}");
+            player.Disparo(player, campo);
             Console.Clear();
+            casillasCompletas++;
+        }
+        public static bool Fin(Jugador player, int contador)
+        {
+            if (player.Ganador)
+            {
+                Console.WriteLine($" Ha ganado {player.Nombre}");
+                return true;
+            }
+            else if (contador == 42)
+            {
+                Console.WriteLine("Empate");
+                return true;
+            }
+            else return false;
         }
     }
-}
-      
-     
 
+}
+     
         
         
     

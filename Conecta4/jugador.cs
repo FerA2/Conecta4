@@ -6,31 +6,18 @@ namespace Conecta4
 {
     class Jugador
     {
-        public Jugador(string nombre, char letra)
-        {
-            this.nombre = nombre;
-            this.letra = letra;
+        public Jugador(string nombre = "player", char letra = 'A')
+        {     
             ganador = false;
         }
-        public string getNombre()
+        public string Nombre { get; set;}
+        
+        public char Letra {get; set;}
+       
+        public bool Ganador { get; set;}
+       
+        public void Disparo(Jugador player, Tablero campo)
         {
-            return nombre;
-        }
-        public char getLetra()
-        {
-            return letra;
-        }
-        public bool getGanador()
-        {
-            return ganador;
-        }
-        public void setGanador()
-        {
-            ganador =true;
-        }
-        public void Disparo(char letra,bool ganador, Tablero campo)
-        {
-            this.ganador = ganador;
             Console.WriteLine("Elige una columna");          
             try
             {
@@ -42,52 +29,47 @@ namespace Conecta4
                     {
                         if (campo.getValorTablero(i, columna) == ' ')
                         {
-                            campo.setValorTablero(i, columna, letra);
-                            if (Ganador(i, columna, letra, campo))
-                            {
-                                setGanador();
-                            }
-                            break;//Si rellena la casilla corta el for.
+                            campo.setValorTablero(i, columna, player.Letra);
+                            if (EsGanador(i, columna, player.Letra, campo)) player.Ganador = true;
+                            break; //Si rellena la casilla corta el for.
                         }
                         else if (i==0)
                         {
                             Console.WriteLine("Columna llena");
-                            Disparo(letra,ganador, campo);
+                            Disparo(player, campo);
                         }
                     }
                 }
                 else
                 {
                     Console.WriteLine("Columna no valida");
-                    Disparo(letra,ganador, campo);
+                    Disparo(player, campo);
                 }
             }
             catch (FormatException ex)
             {
                 Console.WriteLine("Columna no valida");
-                Disparo(letra,ganador, campo);
+                Disparo(player, campo);
             }
         }
 
-        public bool Ganador(int fila, int col, char letra, Tablero campo)
+        public bool EsGanador(int fila, int col, char letra, Tablero campo)
         {
             bool ganador = false;
 
             int contador = 0;
             //Horizontal
             contador = ContadorHorizontal(fila, col, letra, campo);
-            if (contador >= 4) ganador = true;
+            if (contador >= 4) return true;
             //Vertical
             contador = ContadorVertical(fila, col, letra, campo);
-            if (contador >= 4) ganador = true;
+            if (contador >= 4) return true;
             //DiagonalAsc
             contador = ContadorDiagonalAsc(fila, col, letra, campo);
-            if (contador >= 4) ganador = true;
+            if (contador >= 4) return true;
             //DiagonalDesc
             contador = ContadorDiagonalDesc(fila, col, letra, campo);
-            if (contador >= 4) ganador = true;
-
-
+            if (contador >= 4) return true;
             return ganador;
         }
         public static int ContadorHorizontal(int fila, int col,char letra, Tablero campo)
