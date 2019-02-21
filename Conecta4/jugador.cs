@@ -57,7 +57,7 @@ namespace Conecta4
         {
             bool ganador = false;
 
-            int contador = 0;
+            //int contador = 0;
             //Horizontal
             contador = ContadorHorizontal(fila, col, letra, campo);
             if (contador >= 4) return true;

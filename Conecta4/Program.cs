@@ -26,16 +26,12 @@ namespace Conecta4
             campo.Rellena();
             // Iniciamos los turnos de juego.
             int casillasCompletas = 0;
-            while (!Fin(players[0],casillasCompletas)|| !Fin(players[1], casillasCompletas))
+            while (!Fin(players[0],casillasCompletas)&& !Fin(players[1], casillasCompletas))
             {
                 for (int i = 0; i < 2; i++)
                 {
                     Turno(players[i], campo, ref casillasCompletas);
-                    if (players[i].Ganador==true)
-                    {
-                        Console.WriteLine(players[i].Nombre);
-                        break;
-                    }
+                    if (players[i].Ganador == true) break;
                 }
             }
             campo.ImprimeTablero();
@@ -52,7 +48,7 @@ namespace Conecta4
         {
             if (player.Ganador)
             {
-                Console.WriteLine($"Ha ganado {player.Nombre}");
+                Console.WriteLine($" Ha ganado {player.Nombre}");
                 return true;
             }
             else if (contador == 42)
